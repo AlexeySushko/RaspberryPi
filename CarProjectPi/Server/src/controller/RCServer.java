@@ -1,3 +1,8 @@
+package controller;
+
+import constants.Constants;
+import sensors.UltrasonicServo;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,9 +12,11 @@ import java.net.Socket;
 
 public class RCServer {
     private static final int portNumber = 4141;
-    private MyPin myPin;
+    private Controller controller = new Controller();
 
-    public void initServer() throws InterruptedException {
+    private UltrasonicServo ultrasonicServo = new UltrasonicServo();
+
+    public void initServer() {
 
         RCServer rcServer = new RCServer();
 
@@ -25,8 +32,6 @@ public class RCServer {
                     System.out.println("Connection accepted.");
                     String in = "";
 
-                    myPin = new MyPin();
-
                     while ((in = input.readLine()) != null) {
 
                         System.out.println("Received: " + in);
@@ -37,46 +42,51 @@ public class RCServer {
                         }
                         if (in.equals(Constants.STOP)) {
                             rcServer.write(output, "FIN-ACK"); // Final-Acknowledge
-                            myPin.stop();
+                            controller.stop();
                             break;
                         }
+
                         if (in.equals(Constants.GO_UP)) {
                             rcServer.write(output, "< UP >");
-                            myPin.goUp();
 
+                            //check distance
+                            if (ultrasonicServo.getDistance(UltrasonicServo.frontPosition) > Constants.MIN_DISTANCE_BEFORE_CAR) {
+                                controller.goUp();
+                            }
                         }
+
                         if (in.equals(Constants.GO_DOWN)) {
                             rcServer.write(output, "< DOWN >");
-                            myPin.goDown();
+                            controller.goDown();
                         }
                         if (in.equals(Constants.GO_LEFT)) {
-                            myPin.goLeft();
+                            controller.goLeft();
                             rcServer.write(output, "< LEFT >");
                         }
                         if (in.equals(Constants.GO_RIGHT)) {
-                            myPin.rightLed();
+                            controller.rightLed();
                             rcServer.write(output, "< RIGHT >");
                         }
 
 
                         if (in.equals(Constants.STOP_UP)) {
                             rcServer.write(output, "< STOP_UP >");
-                            myPin.stopUp();
+                            controller.stopUp();
 
                         }
                         if (in.equals(Constants.STOP_DOWN)) {
                             rcServer.write(output, "< STOP_DOWN >");
-                            myPin.stopDown();
+                            controller.stopDown();
 
                         }
                         if (in.equals(Constants.STOP_LEFT)) {
                             rcServer.write(output, "< STOP_LEFT >");
-                            myPin.stopLeft();
+                            controller.stopLeft();
 
                         }
                         if (in.equals(Constants.STOP_RIGHT)) {
                             rcServer.write(output, "< STOP_RIGHT >");
-                            myPin.stopRight();
+                            controller.stopRight();
 
                         }
                         if (in.contains(Constants.SEND_MESSAGE)) {
@@ -84,6 +94,7 @@ public class RCServer {
                         }
                     }
                     socket.close();
+                    ultrasonicServo.stopPVM();
                     System.out.print("Closing socket.\n\n");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -92,8 +103,8 @@ public class RCServer {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (myPin != null) {
-                myPin.stop();
+            if (controller != null) {
+                controller.stop();
             }
         }
     }

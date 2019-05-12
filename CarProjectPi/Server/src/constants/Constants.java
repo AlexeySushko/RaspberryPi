@@ -1,5 +1,7 @@
+package constants;
+
 /**
- * Class with constants. This class always must be copy from client class 'Constants'.
+ * Class with constants. This class always must be copy from client class 'constants.Constants'.
  */
 public class Constants {
 
@@ -19,4 +21,6 @@ public class Constants {
     public static final String STOP_RIGHT = "STOP_RIGHT";
 
     public static final String SEND_MESSAGE = "Message:";
+
+    public static final int MIN_DISTANCE_BEFORE_CAR = 25;
 }

@@ -1,27 +1,28 @@
+package controller;
+
 import com.pi4j.io.gpio.*;
+import constants.Constants_GPIO_Pin;
 
 /**
- * Class for added and setting pin.
+ * Class for added, setting and control pin.
  */
-class MyPin {
-    private GpioController gpio;
+public class Controller {
+    public static final GpioController GPIO = GpioFactory.getInstance();;
     private GpioPinDigitalOutput pinUp, pinDown, pinLeft, pinRight;
 
-    public MyPin() {
-        initLed();
+    public Controller() {
+        initPin();
     }
 
     /**
      * Init and set pin numbers.
      */
-    protected void initLed() {
+    protected void initPin() {
 
-        gpio = GpioFactory.getInstance();
-
-        pinUp = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "Up", PinState.LOW);
-        pinDown = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, "Down", PinState.LOW);
-        pinLeft = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "Left", PinState.LOW);
-        pinRight = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "Right", PinState.LOW);
+        pinUp = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.UP_PIN, "Up", PinState.LOW);
+        pinDown = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.DOWN_PIN, "Down", PinState.LOW);
+        pinLeft = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.LEFT_PIN, "Left", PinState.LOW);
+        pinRight = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.RIGHT_PIN, "Right", PinState.LOW);
 
         setShutdown(pinUp);
         setShutdown(pinDown);
@@ -32,10 +33,10 @@ class MyPin {
     /**
      * Method for setup shutdown settings for pin.
      *
-     * @param led current PIN
+     * @param pin current PIN
      */
-    private void setShutdown(GpioPinDigitalOutput led) {
-        led.setShutdownOptions(
+    private void setShutdown(GpioPinDigitalOutput pin) {
+        pin.setShutdownOptions(
                 true, // free pin
                 PinState.LOW, // set state 0
                 PinPullResistance.OFF, // disconnect pull-up resistor
@@ -66,11 +67,11 @@ class MyPin {
 //        }
     }
 
-    void goUp() {
+    public void goUp() {
         setHeightPin(pinUp);
     }
 
-    void goDown() {
+    public void goDown() {
         setHeightPin(pinDown);
     }
 
@@ -83,11 +84,10 @@ class MyPin {
     }
 
 
-
     public void stop() {
-//        if (gpio != null) {
+//        if (GPIO != null) {
         System.out.println("SHUTDOWN");
-//            gpio.shutdown();
+//            GPIO.shutdown();
 //        }
     }
 

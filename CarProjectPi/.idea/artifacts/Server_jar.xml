@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Server:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Server_jar</output-path>
+    <root id="archive" name="Server.jar">
+      <element id="module-output" name="Server" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Server/library/junit.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Server/library/pi4j-core.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Server/library/pi4j-device.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Server/library/pi4j-gpio-extension.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Server/library/pi4j-service.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -1,14 +1,16 @@
+import controller.RCServer;
+
 public class MainServer extends Thread {
     public static void main(String[] args) {
+        initCar();
+    }
 
+    private static void initCar() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
+                    Thread.currentThread().setName("ThreadCar");
                     new RCServer().initServer();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         });
         thread.start();
