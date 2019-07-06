@@ -1,7 +1,7 @@
 package controller;
 
 import constants.Constants;
-import sensors.UltrasonicServo;
+import sensors.servo.UltrasonicServo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,14 +11,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class RCServer {
-    private static final int portNumber = 4141;
-    private Controller controller = new Controller();
 
-    private UltrasonicServo ultrasonicServo = new UltrasonicServo();
+    private static final int portNumber = 4141;
+    private static Controller controller = new Controller();
+
+    public static UltrasonicServo ultrasonicServo = new UltrasonicServo();
 
     public void initServer() {
-
-        RCServer rcServer = new RCServer();
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             while (true) {
@@ -38,60 +37,72 @@ public class RCServer {
 
                         if (in.equals("SYN")) { // Synchronize
                             System.out.println("START");
-                            rcServer.write(output, "SYN-ACK"); // Synchronize-Acknowledge
+                            this.write(output, "SYN-ACK"); // Synchronize-Acknowledge
                         }
                         if (in.equals(Constants.STOP)) {
-                            rcServer.write(output, "FIN-ACK"); // Final-Acknowledge
+                            this.write(output, "FIN-ACK"); // Final-Acknowledge
                             controller.stop();
                             break;
                         }
 
                         if (in.equals(Constants.GO_UP)) {
-                            rcServer.write(output, "< UP >");
-
+                            controller.goUp();
+                            this.write(output, "< UP >");
                             //check distance
-                            if (ultrasonicServo.getDistance(UltrasonicServo.frontPosition) > Constants.MIN_DISTANCE_BEFORE_CAR) {
-                                controller.goUp();
-                            }
+//                            if (ultrasonicServo.getDistance(UltrasonicServo.frontPosition) > Constants.MIN_DISTANCE_BEFORE_CAR) {
+//                                controller.goUp();
+//                            }
                         }
 
                         if (in.equals(Constants.GO_DOWN)) {
-                            rcServer.write(output, "< DOWN >");
+                            this.write(output, "< DOWN >");
                             controller.goDown();
                         }
                         if (in.equals(Constants.GO_LEFT)) {
                             controller.goLeft();
-                            rcServer.write(output, "< LEFT >");
+                            this.write(output, "< LEFT >");
                         }
                         if (in.equals(Constants.GO_RIGHT)) {
-                            controller.rightLed();
-                            rcServer.write(output, "< RIGHT >");
+                            controller.goRight();
+                            this.write(output, "< RIGHT >");
                         }
 
 
                         if (in.equals(Constants.STOP_UP)) {
-                            rcServer.write(output, "< STOP_UP >");
+                            this.write(output, "< STOP_UP >");
                             controller.stopUp();
 
                         }
                         if (in.equals(Constants.STOP_DOWN)) {
-                            rcServer.write(output, "< STOP_DOWN >");
+                            this.write(output, "< STOP_DOWN >");
                             controller.stopDown();
 
                         }
                         if (in.equals(Constants.STOP_LEFT)) {
-                            rcServer.write(output, "< STOP_LEFT >");
+                            this.write(output, "< STOP_LEFT >");
                             controller.stopLeft();
 
                         }
                         if (in.equals(Constants.STOP_RIGHT)) {
-                            rcServer.write(output, "< STOP_RIGHT >");
+                            this.write(output, "< STOP_RIGHT >");
                             controller.stopRight();
 
                         }
                         if (in.contains(Constants.SEND_MESSAGE)) {
-                            rcServer.write(output, "< " + in + ">");
+                            this.write(output, "< " + in + ">");
                         }
+
+
+
+                        //============================= scan area
+//                        if (in.equals(Constants.SCAN_180)) {
+//                            System.out.println("Enter" + Constants.SCAN_180);
+//                            this.write(output, controller.scan180());
+//                            System.out.println("Exit "+Constants.SCAN_180);
+//                            output.flush();
+//                        }
+                        //=============================
+
                     }
                     socket.close();
                     ultrasonicServo.stopPVM();

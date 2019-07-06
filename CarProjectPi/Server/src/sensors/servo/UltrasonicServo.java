@@ -1,7 +1,8 @@
-package sensors;
+package sensors.servo;
 
 import com.pi4j.wiringpi.SoftPwm;
 import constants.Constants_GPIO_Pin;
+import sensors.UltrasonicSensor;
 
 import java.util.Arrays;
 
@@ -40,16 +41,17 @@ public class UltrasonicServo {
         int[] allRange = new int[maxPosition];
 
         for (int i = minPosition; i <= maxPosition; i++) {
+            System.out.println("Iteration :" + i);
             SoftPwm.softPwmWrite(Constants_GPIO_Pin.SERVO_ULTRASONIC_SENSOR.getAddress(), i);
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(150);
             } catch (InterruptedException e) {
                 allRange[i - 1] = 0;
                 e.printStackTrace();
             }
 
-            allRange[i - 1] = getDistance();
+            allRange[i - 1] = 20;// getDistance();
         }
         System.out.println(Arrays.toString(allRange));
 
@@ -58,6 +60,7 @@ public class UltrasonicServo {
 
     /**
      * Get distance for current servo position.
+     *
      * @param position current position.
      * @return current distance.
      */

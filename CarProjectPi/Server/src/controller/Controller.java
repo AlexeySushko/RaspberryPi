@@ -2,13 +2,15 @@ package controller;
 
 import com.pi4j.io.gpio.*;
 import constants.Constants_GPIO_Pin;
+import sensors.servo.UltrasonicServo;
 
 /**
  * Class for added, setting and control pin.
  */
 public class Controller {
-    public static final GpioController GPIO = GpioFactory.getInstance();;
-    private GpioPinDigitalOutput pinUp, pinDown, pinLeft, pinRight;
+    public static final GpioController GPIO = GpioFactory.getInstance();
+
+    private GpioPinDigitalOutput A_1A, A_1B, B_1A, B_1B;
 
     public Controller() {
         initPin();
@@ -18,22 +20,21 @@ public class Controller {
      * Init and set pin numbers.
      */
     protected void initPin() {
+        A_1A = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.A_1A, "Up", PinState.LOW);
+        A_1B = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.A_1B, "Down", PinState.LOW);
+        B_1A = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.B_1A, "Left", PinState.LOW);
+        B_1B = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.B_1B, "Right", PinState.LOW);
 
-        pinUp = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.UP_PIN, "Up", PinState.LOW);
-        pinDown = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.DOWN_PIN, "Down", PinState.LOW);
-        pinLeft = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.LEFT_PIN, "Left", PinState.LOW);
-        pinRight = GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.RIGHT_PIN, "Right", PinState.LOW);
-
-        setShutdown(pinUp);
-        setShutdown(pinDown);
-        setShutdown(pinLeft);
-        setShutdown(pinRight);
+        setShutdown(A_1A);
+        setShutdown(A_1B);
+        setShutdown(B_1A);
+        setShutdown(B_1B);
     }
 
     /**
      * Method for setup shutdown settings for pin.
      *
-     * @param pin current PIN
+     * @param pin current PIN.
      */
     private void setShutdown(GpioPinDigitalOutput pin) {
         pin.setShutdownOptions(
@@ -49,10 +50,10 @@ public class Controller {
      * @param pin for change state.
      */
     private void setHeightPin(GpioPinDigitalOutput pin) {
-//        if (pin.isLow()) {
-//            pin.high();
-//            System.out.println("Set height pin #" + pin.getPin().getAddress());
-//        }
+        if (pin.isLow()) {
+            pin.high();
+            System.out.println("Set height pin #" + pin.getPin().getAddress());
+        }
     }
 
     /**
@@ -61,50 +62,82 @@ public class Controller {
      * @param pin for change state.
      */
     private void setLowPin(GpioPinDigitalOutput pin) {
-//        if(pin.isHigh()) {
-//            pin.low();
-//            System.out.println("Set low pin #" + pin.getPin().getAddress());
-//        }
+        if (pin.isHigh()) {
+            pin.low();
+            System.out.println("Set low pin #" + pin.getPin().getAddress());
+        }
     }
 
     public void goUp() {
-        setHeightPin(pinUp);
+        resetAllWay();
+        setHeightPin(A_1A);
+        setHeightPin(B_1B);
     }
 
     public void goDown() {
-        setHeightPin(pinDown);
+        resetAllWay();
+        setHeightPin(A_1B);
+        setHeightPin(B_1A);
     }
 
     public void goLeft() {
-        setHeightPin(pinLeft);
+        resetAllWay();
+        setHeightPin(B_1B);
+        setHeightPin(A_1B);
     }
 
-    public void rightLed() {
-        setHeightPin(pinRight);
+    public void goRight() {
+        resetAllWay();
+        setHeightPin(B_1A);
+        setHeightPin(A_1A);
     }
 
 
     public void stop() {
-//        if (GPIO != null) {
-        System.out.println("SHUTDOWN");
-//            GPIO.shutdown();
-//        }
+        if (GPIO != null) {
+            System.out.println("SHUTDOWN");
+            GPIO.shutdown();
+        }
     }
 
     public void stopUp() {
-        setLowPin(pinUp);
+        setLowPin(A_1A);
+        setLowPin(B_1B);
     }
 
     public void stopDown() {
-        setLowPin(pinDown);
+        setLowPin(A_1B);
+        setLowPin(B_1A);
     }
 
     public void stopLeft() {
-        setLowPin(pinLeft);
+        setLowPin(B_1B);
+        setLowPin(A_1B);
     }
 
 
     public void stopRight() {
-        setLowPin(pinRight);
+
+        setLowPin(B_1A);
+        setLowPin(A_1A);
+    }
+
+    public String scan180() {
+        UltrasonicServo servo = RCServer.ultrasonicServo;
+        int[] rangeRes = servo.getAllRangeDistance();
+        StringBuilder sbResult = new StringBuilder();
+        for (int i : rangeRes) {
+            sbResult.append(i).append("$");
+        }
+        sbResult.append("\n");
+        servo.stopPVM();
+        return sbResult.toString();
+    }
+
+    private void resetAllWay(){
+        stopUp();
+        stopDown();
+        stopLeft();
+        stopRight();
     }
 }

@@ -1,4 +1,4 @@
-import allClasses.MainClient;
+import manipulation.ActionClient;
 
 import javax.swing.*;
 
@@ -11,7 +11,7 @@ public class MainClientWindow extends JFrame {
         setSize(702, 578);
         setResizable(false);
         setLocation(700, 200);
-        add(new MainClient());
+        add(new ActionClient());
         setVisible(true);
     }
 

@@ -1,12 +1,17 @@
 package entity;
 
-import allClasses.Constants;
+import manipulation.Constants;
+import manipulation.RCClient;
 import operations.Go;
-import allClasses.RCClient;
+import operations.Sensors;
 import operations.Stop;
+import ui.RadarWindowFX;
 
-public class Car implements Go, Stop {
-    public static RCClient rcClient = new RCClient();
+import java.io.IOException;
+
+public class Car implements Go, Stop, Sensors {
+    public static RCClient rcClient = new RCClient();// deploy
+//    public static RCClientTest rcClient = new RCClientTest(); // test
 
 
     @Override
@@ -47,5 +52,28 @@ public class Car implements Go, Stop {
     @Override
     public void stopRight() {
         rcClient.sendMessage(Constants.STOP_RIGHT);
+    }
+
+    @Override
+    public String scan180() {
+        rcClient.sendMessage(Constants.SCAN_180);
+        try {
+            if (rcClient.input.readLine() != null) {
+                String res = rcClient.input.readLine();
+
+                for (String s : res.split("$")) {
+                    System.out.println("На клиенте: " + s);
+                }
+                System.out.println(rcClient.input.readLine());
+
+                RadarWindowFX radarWindowFX = new RadarWindowFX();
+                radarWindowFX.resArrStr = res.split("\\$");
+                radarWindowFX.showFigure();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -30,9 +30,8 @@ public class UltrasonicSensor {
      * @return Distance in centimeters.
      */
     public int checkDistance() {
-        int distance = 0;
+        int distance = -1;
         try {
-
             sensorTriggerPin.high();
             Thread.sleep((long) 0.01);
             sensorTriggerPin.low();
@@ -47,7 +46,8 @@ public class UltrasonicSensor {
             long endTime = System.nanoTime();
 
             distance = (int) ((((endTime - startTime) / 1e3) / 2) / 29.1);
-            System.out.println("Distance :" + distance + " cm.");
+            System.out.println("Distance : " + distance + " cm.");
+            Thread.sleep(20);
 
         } catch (InterruptedException e) {
             e.printStackTrace();

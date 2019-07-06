@@ -6,13 +6,14 @@ public class MainServer extends Thread {
     }
 
     private static void initCar() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                    Thread.currentThread().setName("ThreadCar");
-                    new RCServer().initServer();
-            }
-        });
-        thread.start();
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                    Thread.currentThread().setName("ThreadCar");
+                    new RCServer().initServer();// deploy
+//                    new ServerTest().initServer();// testing
+//            }
+//        });
+//        thread.start();
     }
 }

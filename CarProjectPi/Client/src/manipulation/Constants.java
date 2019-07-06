@@ -1,6 +1,8 @@
-package allClasses;
+package manipulation;
 
 public class Constants {
+
+    public static final String SERVER_IP = "192.168.0.103";
 
     public static final String BACKGROUND_PNG = "background.png";
 
@@ -20,4 +22,7 @@ public class Constants {
     public static final String STOP_RIGHT = "STOP_RIGHT";
 
     public static final String SEND_MESSAGE = "Message:";
+
+    public static final String SCAN_180 = "SCAN_180";
+
 }

@@ -1,4 +1,4 @@
-package allClasses;
+package manipulation;
 
 import entity.Car;
 
@@ -7,13 +7,13 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class MainClient extends JPanel {
+public class ActionClient extends JPanel {
 
     Car car = new Car();
 
     private Image background;
 
-    public MainClient() {
+    public ActionClient() {
         addKeyListener(new KeyListener());
         initImage();
         setFocusable(true);
@@ -33,6 +33,7 @@ public class MainClient extends JPanel {
      * Class to handle events
      */
     class KeyListener extends KeyAdapter {
+        private boolean scaning = false;
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -51,6 +52,12 @@ public class MainClient extends JPanel {
                     break;
                 case KeyEvent.VK_A:
                     car.goLeft();
+                    break;
+                case KeyEvent.VK_O:
+                    if (scaning == false){
+                        scaning = true;
+                        car.scan180();
+                    }
                     break;
             }
         }
@@ -74,6 +81,9 @@ public class MainClient extends JPanel {
                     break;
                 case KeyEvent.VK_A:
                     car.stopLeft();
+                    break;
+                case KeyEvent.VK_O:
+                    scaning = false;
                     break;
             }
         }

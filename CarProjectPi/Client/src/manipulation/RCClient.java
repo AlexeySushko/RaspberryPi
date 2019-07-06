@@ -1,4 +1,4 @@
-package allClasses;
+package manipulation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,14 +12,13 @@ import java.net.UnknownHostException;
  * Class for connect to server and send data to server.
  */
 public class RCClient {
-    private static String SERVER_IP = "192.168.0.102";
-    private Socket socket = null;
-    private PrintWriter output = null;
-    private BufferedReader input = null;
+    public Socket socket = null;
+    public PrintWriter output = null;
+    public BufferedReader input = null;
 
     public RCClient() {
         try {
-            socket = new Socket(InetAddress.getByName(SERVER_IP), 4141);
+            socket = new Socket(InetAddress.getByName(Constants.SERVER_IP), 4141);
             output = new PrintWriter(socket.getOutputStream(), true);
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             sendCommand(Constants.SYNCHRONIZED);
