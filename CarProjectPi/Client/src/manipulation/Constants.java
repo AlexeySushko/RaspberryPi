@@ -23,6 +23,6 @@ public class Constants {
 
     public static final String SEND_MESSAGE = "Message:";
 
-    public static final String SCAN_180 = "SCAN_180";
+    public static final String SCAN_DISTANCE = "SCAN_DISTANCE";
 
 }

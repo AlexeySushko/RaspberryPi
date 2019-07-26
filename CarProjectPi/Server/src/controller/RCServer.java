@@ -92,16 +92,10 @@ public class RCServer {
                             this.write(output, "< " + in + ">");
                         }
 
-
-
-                        //============================= scan area
-//                        if (in.equals(Constants.SCAN_180)) {
-//                            System.out.println("Enter" + Constants.SCAN_180);
-//                            this.write(output, controller.scan180());
-//                            System.out.println("Exit "+Constants.SCAN_180);
-//                            output.flush();
-//                        }
-                        //=============================
+                        if (in.equals(Constants.SCAN_DISTANCE)) {
+                            this.write(output, Constants.SCAN_DISTANCE);
+                            controller.scanDistance();
+                        }
 
                     }
                     socket.close();

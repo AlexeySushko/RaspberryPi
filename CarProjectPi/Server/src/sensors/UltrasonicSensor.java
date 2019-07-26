@@ -11,17 +11,16 @@ public class UltrasonicSensor {
     private static GpioPinDigitalOutput sensorTriggerPin;
     private static GpioPinDigitalInput sensorEchoPin;
 
+    private static UltrasonicSensor ultrasonicSensor;
 
-    public UltrasonicSensor() {
-        init();
-    }
-
-    /**
-     * Initialize pins for Trigger and Echo.
-     */
-    public void init() {
-        sensorTriggerPin = Controller.GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.ULTRASONIC_SENSOR_TRIGGER);
-        sensorEchoPin = Controller.GPIO.provisionDigitalInputPin(Constants_GPIO_Pin.ULTRASONIC_SENSOR_ECHO, PinPullResistance.PULL_DOWN);
+    public static UltrasonicSensor getInstance() {
+        if(ultrasonicSensor == null) {
+            ultrasonicSensor = new UltrasonicSensor();
+            sensorTriggerPin = Controller.GPIO.provisionDigitalOutputPin(Constants_GPIO_Pin.ULTRASONIC_SENSOR_TRIGGER);
+            sensorEchoPin = Controller.GPIO.provisionDigitalInputPin(Constants_GPIO_Pin.ULTRASONIC_SENSOR_ECHO, PinPullResistance.PULL_DOWN);
+            return ultrasonicSensor;
+        }
+        return ultrasonicSensor;
     }
 
     /**

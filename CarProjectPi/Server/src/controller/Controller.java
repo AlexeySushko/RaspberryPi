@@ -2,6 +2,7 @@ package controller;
 
 import com.pi4j.io.gpio.*;
 import constants.Constants_GPIO_Pin;
+import sensors.UltrasonicSensor;
 import sensors.servo.UltrasonicServo;
 
 /**
@@ -9,6 +10,7 @@ import sensors.servo.UltrasonicServo;
  */
 public class Controller {
     public static final GpioController GPIO = GpioFactory.getInstance();
+    private Distance distance = new Distance();
 
     private GpioPinDigitalOutput A_1A, A_1B, B_1A, B_1B;
 
@@ -70,8 +72,12 @@ public class Controller {
 
     public void goUp() {
         resetAllWay();
-        setHeightPin(A_1A);
-        setHeightPin(B_1B);
+        if (distance.getDistance() > 30) {
+            setHeightPin(A_1A);
+            setHeightPin(B_1B);
+        }
+
+
     }
 
     public void goDown() {
@@ -134,10 +140,51 @@ public class Controller {
         return sbResult.toString();
     }
 
-    private void resetAllWay(){
+    public void scanDistance() {
+        new UltraThread("UltraDistance").start();
+    }
+
+    private void resetAllWay() {
         stopUp();
         stopDown();
         stopLeft();
         stopRight();
+    }
+
+    class UltraThread extends Thread {
+
+        UltraThread(String name) {
+            super(name);
+        }
+
+        @Override
+        public void run() {
+            UltrasonicSensor ultrasonicSensor = UltrasonicSensor.getInstance();
+
+            synchronized (ultrasonicSensor) {
+                while (true) {
+                    distance.setDistance(ultrasonicSensor.checkDistance());
+                    System.out.println("Set " + distance.getDistance() + "cm.");
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    class Distance {
+        private int distance = 31;
+
+        public synchronized void setDistance(int distance) {
+            this.distance = distance;
+        }
+
+        public synchronized int getDistance() {
+            System.out.println(distance);
+            return distance;
+        }
     }
 }

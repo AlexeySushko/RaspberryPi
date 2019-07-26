@@ -24,6 +24,6 @@ public class Constants {
 
     public static final int MIN_DISTANCE_BEFORE_CAR = 25;
 
-    public static final String SCAN_180 = "SCAN_180";
+    public static final String SCAN_DISTANCE = "SCAN_DISTANCE";
 
 }

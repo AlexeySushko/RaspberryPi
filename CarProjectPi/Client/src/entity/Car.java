@@ -56,24 +56,24 @@ public class Car implements Go, Stop, Sensors {
 
     @Override
     public String scan180() {
-        rcClient.sendMessage(Constants.SCAN_180);
-        try {
-            if (rcClient.input.readLine() != null) {
-                String res = rcClient.input.readLine();
-
-                for (String s : res.split("$")) {
-                    System.out.println("На клиенте: " + s);
-                }
-                System.out.println(rcClient.input.readLine());
-
-                RadarWindowFX radarWindowFX = new RadarWindowFX();
-                radarWindowFX.resArrStr = res.split("\\$");
-                radarWindowFX.showFigure();
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        rcClient.sendMessage(Constants.SCAN_DISTANCE);
+//        try {
+//            if (rcClient.input.readLine() != null) {
+//                String res = rcClient.input.readLine();
+//
+//                for (String s : res.split("$")) {
+//                    System.out.println("На клиенте: " + s);
+//                }
+//                System.out.println(rcClient.input.readLine());
+//
+//                RadarWindowFX radarWindowFX = new RadarWindowFX();
+//                radarWindowFX.resArrStr = res.split("\\$");
+//                radarWindowFX.showFigure();
+//
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        return "";
     }
 }
