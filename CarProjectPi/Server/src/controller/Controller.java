@@ -1,5 +1,6 @@
 package controller;
 
+import automatic.FollowLine;
 import com.pi4j.io.gpio.*;
 import constants.Constants_GPIO_Pin;
 import sensors.UltrasonicSensor;
@@ -13,6 +14,8 @@ public class Controller {
     private Distance distance = new Distance();
 
     private GpioPinDigitalOutput A_1A, A_1B, B_1A, B_1B;
+
+    private boolean follow = false;
 
     public Controller() {
         initPin();
@@ -144,11 +147,20 @@ public class Controller {
         new UltraThread("UltraDistance").start();
     }
 
-    private void resetAllWay() {
+    public void resetAllWay() {
         stopUp();
         stopDown();
         stopLeft();
         stopRight();
+    }
+
+    public void followLine(boolean follow) {
+        FollowLine followLine = FollowLine.getInstance(this);
+        if(follow){
+            followLine.runFollow();
+        } else {
+            followLine.stopFollow();
+        }
     }
 
     class UltraThread extends Thread {

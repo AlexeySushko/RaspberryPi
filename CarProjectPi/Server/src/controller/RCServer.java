@@ -14,6 +14,7 @@ public class RCServer {
 
     private static final int portNumber = 4141;
     private static Controller controller = new Controller();
+    private boolean follow = false;
 
     public static UltrasonicServo ultrasonicServo = new UltrasonicServo();
 
@@ -95,6 +96,12 @@ public class RCServer {
                         if (in.equals(Constants.SCAN_DISTANCE)) {
                             this.write(output, Constants.SCAN_DISTANCE);
                             controller.scanDistance();
+                        }
+
+                        if(in.equals(Constants.FOLLOW_LINE)){
+                            this.write(output, Constants.FOLLOW_LINE);
+                            follow = !follow;
+                            controller.followLine(follow);
                         }
 
                     }

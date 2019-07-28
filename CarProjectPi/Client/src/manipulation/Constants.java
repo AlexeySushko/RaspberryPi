@@ -24,5 +24,6 @@ public class Constants {
     public static final String SEND_MESSAGE = "Message:";
 
     public static final String SCAN_DISTANCE = "SCAN_DISTANCE";
+    public static final String FOLLOW_LINE = "FOLLOW_LINE";
 
 }

@@ -76,4 +76,9 @@ public class Car implements Go, Stop, Sensors {
 //        }
         return "";
     }
+
+    public void followLine() {
+        rcClient.sendMessage(Constants.FOLLOW_LINE);
+    }
+
 }

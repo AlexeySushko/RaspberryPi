@@ -58,6 +58,8 @@ public class ActionClient extends JPanel {
                         scaning = true;
                         car.scan180();
                     }
+                case KeyEvent.VK_T:
+                    car.followLine();
                     break;
             }
         }

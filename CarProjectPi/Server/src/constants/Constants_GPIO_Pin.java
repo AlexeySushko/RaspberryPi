@@ -20,4 +20,7 @@ public class Constants_GPIO_Pin {
     public static final Pin ULTRASONIC_SENSOR_ECHO = RaspiPin.GPIO_28;
 
     public static final Pin SERVO_ULTRASONIC_SENSOR = RaspiPin.GPIO_01;
+
+    public static final Pin LINE_SENSOR_LEFT_OUT = RaspiPin.GPIO_25;
+    public static final Pin LINE_SENSOR_RIGHT_OUT = RaspiPin.GPIO_24;
 }
